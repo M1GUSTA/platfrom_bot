@@ -10,12 +10,15 @@ from tgbot.handlers.echo import echo_router
 from tgbot.handlers.user import user_router
 from tgbot.middlewares.config import ConfigMiddleware
 from tgbot.services import broadcaster
+from tgbot.services.db_base import db
 
 logger = logging.getLogger(__name__)
 
 
-async def on_startup(bot: Bot, admin_ids: list[int]):
-    await broadcaster.broadcast(bot, admin_ids, "Бот був запущений")
+async def on_startup(bot: Bot, admin_ids: list[int], db):
+    logging.info("Создаем подключение к базе данных")
+    await db.create()
+    await broadcaster.broadcast(bot, admin_ids, "Бот запущен!")
 
 
 def register_global_middlewares(dp: Dispatcher, config):
@@ -35,16 +38,17 @@ async def main():
     bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
     dp = Dispatcher(storage=storage)
 
+
     for router in [
-        admin_router,
         user_router,
+        admin_router,
         echo_router
     ]:
         dp.include_router(router)
 
     register_global_middlewares(dp, config)
 
-    await on_startup(bot, config.tg_bot.admin_ids)
+    await on_startup(bot, config.tg_bot.admin_ids, db)
     await dp.start_polling(bot)
 
 
@@ -52,4 +56,4 @@ if __name__ == '__main__':
     try:
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
-        logger.error("Бот був вимкнений!")
+        logger.error("Бот остановлен!")
