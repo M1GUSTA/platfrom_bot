@@ -55,15 +55,48 @@ class Database:
         sql = "SELECT * FROM admin"
         return await self.execute(sql, fetch=True)
 
+    async def select_admin(self, **kwargs):
+        sql = "SELECT * FROM admin WHERE "
+        sql, parameters = self.format_args(sql, parameters=kwargs)
+        return await self.execute(sql, *parameters, fetchrow=True)
+
     async def select_user(self, **kwargs):
         sql = "SELECT * FROM users WHERE "
         sql, parameters = self.format_args(sql, parameters=kwargs)
         return await self.execute(sql, *parameters, fetchrow=True)
 
-    async def add_proffer(self, **kwargs):
+    async def add_proffer(self, content, anon, id_user, id_status, title):
         sql = "INSERT INTO proffer(content, anon, id_user, id_status, title) VALUES($1, $2, $3, $4, $5) returning *"
-        return await self.execute(sql, kwargs, fetchrow=True)
+        return await self.execute(sql, content, anon, id_user, id_status, title, fetchrow=True)
 
 
+    async def select_proffer(self, **kwargs):
+        sql = "SELECT * FROM proffer WHERE "
+        sql, parameters = self.format_args(sql, parameters=kwargs)
+        return await self.execute(sql, *parameters, fetchrow=True)
 
+
+    async def select_user_proffer(self, **kwargs):
+        sql = "SELECT * FROM user_prof WHERE "
+        sql, parameters = self.format_args(sql, parameters=kwargs)
+        return await self.execute(sql, *parameters, fetchrow=True)
+
+
+    async def update_proffer_status(self, id_status, id_proffer):
+        sql = "UPDATE proffer SET id_status = $1 WHERE id_proffer = $2"
+        return await self.execute(sql, id_status, id_proffer, execute=True)
+
+
+    async def update_proffer(self,  content, title, id_proffer):
+        sql = "UPDATE proffer SET content = $1, title=$2  WHERE id_proffer = $3"
+        return await self.execute(sql, content, title, id_proffer, execute=True)
+
+    async def select_action(self, **kwargs):
+        sql = "SELECT * FROM admin_actions WHERE "
+        sql, parameters = self.format_args(sql, parameters=kwargs)
+        return await self.execute(sql, *parameters, fetchrow=True)
+
+    async def add_action(self, id_admin, id_operation, id_proffer):
+        sql = "INSERT INTO journal(id_admin, id_operation, id_proffer) VALUES($1, $2, $3) returning *"
+        return await self.execute(sql, id_admin, id_operation, id_proffer, fetchrow=True)
 

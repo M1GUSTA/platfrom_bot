@@ -7,3 +7,8 @@ class NotAuthorised(StatesGroup):
 class Proffer(StatesGroup):
     title = State()
     content = State()
+
+class Edit(StatesGroup):
+    edit = State()
+    title = State()
+    content = State()
