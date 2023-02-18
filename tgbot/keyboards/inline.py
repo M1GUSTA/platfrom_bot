@@ -18,7 +18,7 @@ def get_check_keyboard() -> InlineKeyboardMarkup:
         ],
         [
             types.InlineKeyboardButton(text="Редактировать", callback_data="check_Edit"),
-            types.InlineKeyboardButton(text="Комментировать", callback_data="check_Comment")
+            # types.InlineKeyboardButton(text="Комментировать", callback_data="check_Comment")
         ]
     ]
     keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons, resize_keyboard=True)
@@ -35,19 +35,7 @@ def get_anon_keyboard():
     keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons, resize_keyboard=True)
     return keyboard
 
-def get_prof_keyboard():
-    buttons = [
-        [
-            types.InlineKeyboardButton(text="На голосовании", callback_data="show_vote"),
-            types.InlineKeyboardButton(text="В процессе", callback_data="show_prof")
-        ],
-        [
-            types.InlineKeyboardButton(text="Выполненные", callback_data="show_prof"),
-            types.InlineKeyboardButton(text="Отклоненные", callback_data="show_prof")
-        ]
-    ]
-    keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons, resize_keyboard=True)
-    return keyboard
+
 
 def get_prof_keyboard1():
     buttons = [
@@ -59,9 +47,9 @@ def get_prof_keyboard1():
             types.InlineKeyboardButton(text="Выполненные", callback_data="show_complete"),
             types.InlineKeyboardButton(text="Отклоненные", callback_data="show_reject")
         ],
-        [
-            types.InlineKeyboardButton(text="Мои предложения", callback_data="show_mine")
-        ]
+        # [
+        #     types.InlineKeyboardButton(text="Мои предложения", callback_data="show_mine")
+        # ]
     ]
     keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons, resize_keyboard=True)
     return keyboard
@@ -84,4 +72,44 @@ def get_cancel_button():
     builder.row(types.InlineKeyboardButton(text="Отмена",
                                            callback_data="cancel"))
     keyboard = builder.as_markup()
+    return keyboard
+
+def get_vote_keyboard():
+    buttons = [
+        [
+            types.InlineKeyboardButton(text="🔥", callback_data="vote_positive"),
+            types.InlineKeyboardButton(text="😖", callback_data="vote_negative")
+        ]
+    ]
+    keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons, resize_keyboard=True)
+    return keyboard
+
+def pagination_keyboard():
+    buttons = [
+        [
+            types.InlineKeyboardButton(text="⬅️", callback_data="prof_previous"),
+            types.InlineKeyboardButton(text="➡️", callback_data="prof_next")
+        ],
+        [
+            types.InlineKeyboardButton(text="Назад", callback_data="prof_edit_cancel")
+        ]
+    ]
+    keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons, resize_keyboard=True)
+    return keyboard
+
+def vote_pagination_keyboard():
+    buttons = [
+        [
+            types.InlineKeyboardButton(text="🔥", callback_data="vote_positive"),
+            types.InlineKeyboardButton(text="😖", callback_data="vote_negative")
+        ],
+        [
+            types.InlineKeyboardButton(text="⬅️", callback_data="prof_previous"),
+            types.InlineKeyboardButton(text="➡️", callback_data="prof_next")
+        ],
+        [
+            types.InlineKeyboardButton(text="Назад", callback_data="prof_edit_cancel")
+        ]
+    ]
+    keyboard = types.InlineKeyboardMarkup(inline_keyboard=buttons, resize_keyboard=True)
     return keyboard
